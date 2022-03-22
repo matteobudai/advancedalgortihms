@@ -1,0 +1,1 @@
+def Prim (G, s):
