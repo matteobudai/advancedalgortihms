@@ -38,7 +38,7 @@ def Prim (G: Graph, s: Node):
 start = time.time()
 startingNode = 1 # Root node tag
 result = Graph()
-result.buildGraph(open("dataset/input_random_01_10.txt", "r"))
+result.buildGraph(open("mst_dataset/input_random_01_10.txt", "r"))
 Prim(result, result.nodes.get(startingNode))
 print("Program execution time =", time.time() - start)
 sum = 0
