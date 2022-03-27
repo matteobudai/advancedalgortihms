@@ -1,5 +1,3 @@
-import math
-import time
 from collections import defaultdict
 
 #Create a node
@@ -17,29 +15,26 @@ class Graph:
     def __init__(self):
         self.nodes = defaultdict(Node)
     
-    #Convert text to lists of strings
-    def txt_to_data(self, fileA):
-        with open(fileA, 'r') as infile:
-            data = infile.readlines()
-            for i in data:
-                i = i.split()
-            self.numNodes(i[0])
-            i.pop(0)
-            for iterate in range(len(i)):
-                info = list(map(int, i[iterate])) # Convert all the strings deriving from split to int
-                self.addNode(info[0], info[1], info[2])
+    def buildGraph(self, input):
+        lines = input.readlines()
+        self.numNodes(int(lines[0].split()[0]))
+        lines.pop(0) 
+        lines.pop(-1)
+        for iterate in range(len(lines)):
+            print(lines[iterate])
+            info = list(map(int, lines[iterate].split()))
+            self.makeNodes(info[0], info[1], info[2])
 
-    #Get number of vertices
+    #Create number of vertices
     def numNodes(self, num):
         for iterate in range(num):
             self.nodes[iterate] = Node(iterate)
     
     #Create all of the nodes
-    def makeNode(self, tag, adjTag, adjCost):
+    def makeNodes(self, tag, adjTag, adjCost):
         self.nodes[tag].adjacencyList.append([self.nodes[adjTag], adjCost])
         self.nodes[adjTag].adjacencyList.append([self.nodes[tag], adjCost])
 
-    
-
 new = Graph()
-lists = new.txt_to_data('input_random_01_10 copia.txt')
+new.buildGraph(open("input_random_01_10 copia.txt", "r"))
+print(new)
