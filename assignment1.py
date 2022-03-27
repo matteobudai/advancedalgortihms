@@ -2,7 +2,6 @@ import math
 import time
 from collections import defaultdict
 
-
 class Node:
     def __init__(self, tag: int):
         self.tag = tag
