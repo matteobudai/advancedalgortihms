@@ -37,4 +37,3 @@ class Graph:
 
 new = Graph()
 new.buildGraph(open("input_random_01_10 copia.txt", "r"))
-print(new)
