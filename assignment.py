@@ -29,8 +29,8 @@ class Graph:
             self.makeNodes(info[0], info[1], info[2])
 
     #Create number of vertices
-    def numNodes(self, num):
-        for iterate in range(num+1):
+    def numNodes(self, vertices):
+        for iterate in range(1, vertices+1):
             self.nodes[iterate] = Node(iterate)
     
     #Create all of the nodes
