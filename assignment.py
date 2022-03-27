@@ -9,6 +9,10 @@ class Node:
         self.isPresent = True
         self.index = tag-1 # Track the index of the node in the heap instead of using list.index() method which is O(n)
         self.adjacencyList = []
+    
+    # For test
+    def print(self):
+        print("tag =", self.tag, "adjList=", self.adjacencyList, "key=", self.key)
 
 #Create a graph
 class Graph:
@@ -19,15 +23,14 @@ class Graph:
         lines = input.readlines()
         self.numNodes(int(lines[0].split()[0]))
         lines.pop(0) 
-        lines.pop(-1)
         for iterate in range(len(lines)):
-            print(lines[iterate])
             info = list(map(int, lines[iterate].split()))
+            print(info)
             self.makeNodes(info[0], info[1], info[2])
 
     #Create number of vertices
     def numNodes(self, num):
-        for iterate in range(num):
+        for iterate in range(num+1):
             self.nodes[iterate] = Node(iterate)
     
     #Create all of the nodes
