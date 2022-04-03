@@ -1,7 +1,6 @@
 import math
 import time
 from collections import defaultdict
-import sys
 
 #Create a node
 class Node:
@@ -12,10 +11,6 @@ class Node:
         self.isPresent = True
         self.index = tag-1 # Track the index of the node in the heap instead of using list.index() method which is O(n)
         self.adjacencyList = []
-    
-    # For test
-    def print(self):
-        print("tag =", self.tag, "adjList=", self.adjacencyList, "key=", self.key)
 
 #Create a graph
 class Graph:
@@ -41,46 +36,77 @@ class Graph:
         self.nodes[tag].adjacencyList.append([self.nodes[adjTag], adjCost])
         self.nodes[adjTag].adjacencyList.append([self.nodes[tag], adjCost])
 
+
 class ArrayHeap(list):
     def __init__(self, array):
         super().__init__(array)
         self.heapSize = len(array)
 
 class MinHeap:
-    def __init__(self):
-        return 0 #complete
-       
-    def parent(self, pos):
-        return pos//2
+    def __init__(self, array: list, root: Node):
+        self.arrayHeap = ArrayHeap(array)
+        # Check if the root node is not the first
+        if self.arrayHeap[0] != self.arrayHeap[root.tag-1]: # reset the starting node and update all indexes
+            rootNode = self.arrayHeap[root.tag-1]
+            self.arrayHeap.remove(rootNode)
+            self.arrayHeap.insert(0,rootNode)
+            for i in range(0,self.arrayHeap.heapSize):
+                self.arrayHeap[i].index = i
 
-    def left(self, k):
-        return 2 * k + 1
+    def getParentIndex(self,index):
+        return (index-1)//2
 
-    def right(self, k):
-        return 2 * k + 2
+    def getLeftChildIndex(self,index):
+        return 2*index+1
+
+    def getRightChildIndex(self,index):
+        return 2*index+2
+
+    def hasParent(self,index):
+        return self.getParentIndex(index)>=0
+
+    def swap(self, left, right):
+        self.arrayHeap[left], self.arrayHeap[right] = self.arrayHeap[right], self.arrayHeap[left]
+
+    def minHeapify(self, i):
+        l = self.getLeftChildIndex(i)
+        r = self.getRightChildIndex(i)
+        print('complete')
+
+    def extractMin(self):
+        print('complete')
     
     
-
+   
+#Algorithm
 def Prim (G: Graph, s: Node):
-    start=time.time()
+    start=time.time()  
     for u in G.nodes.values():
-        u.key= math.inf
+         u.key= math.inf
     s.key = 0
-    Q= MinHeap #complete
-    while Q.heapSize != 0:
-        u=MinHeap.extractMin() #complete
-        for V in u.adjacencyList:
-            if V[0].isPresent() and V[1]<V[0].key:
-                V[0].key=V[1]
-                V[0].parent= u
-                #property to mantain MinHeap
-    print("Start = node", s.tag,"\nPrim execution time =", time.time() - start)
+    Q = MinHeap(list(G.nodes.values()), s)
+    while Q.arrayHeap.heapSize != 0:
+        u=Q.extractMin()
+        for v in u.adjacencyList:
+            if v[0].isPresent and v[1] < v[0].key:
+                v[0].parent = u
+                v[0].key = v[1]                
+    end=time.time()
+    print("Start = node", s.tag,"\nPrim execution time =", end - start)
+
 
 
 start = time.time()
 startingNode = 1 # Root node tag
 new = Graph()
-new.buildGraph(open("mst_dataset/input_random_01_10.txt", "r"))
+new.buildGraph(open("mst_dataset/input_random_02_10.txt", "r"))
+Prim(new, new.nodes.get(startingNode))
+end = time.time()
+print("Program execution time =", end - start)
+sum = 0
+for node in new.nodes.values():
+    sum += node.key
+print("Final cost =",sum, "\n")
 
 
 
