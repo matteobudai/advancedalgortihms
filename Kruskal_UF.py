@@ -4,7 +4,52 @@
 
 from ast import List
 import time 
+from collections import defaultdict
+
 start_time = time.time()
+
+class Node:
+    def __init__(self, tag: int):
+        self.tag = tag
+        self.key = None
+        self.parent = None
+        self.isPresent = True
+        self.index = tag-1 # Track the index of the node in the heap instead of using list.index() method which is O(n)
+        self.adjacencyList = []
+
+#Create a graph
+class Graph:
+    def __init__(self):
+        self.nodes = defaultdict(Node)
+
+    def buildGraph(self, input):
+        lines = input.readlines()
+        numEdges = int(lines[0].split()[1])
+        lines.pop(0) 
+        info = []
+        info_int = []
+        for iterate in range(len(lines)):
+            info.append(lines[iterate].split())
+        for i in range(0,numEdges): 
+            info_int.append([int(info[i][0]), int(info[i][1]), int(info[i][2])])
+        return info_int
+
+
+    #Create number of edges
+    def numEdges(self, input):
+        lines = input.readlines(0)
+        numEdges = int(lines[0].split()[1])
+        return numEdges
+
+    #Create number of vertices
+    def numNodes(self, vertices):
+        for iterate in range(1, vertices+1):
+            self.nodes[iterate] = Node(iterate)
+    
+    #Create all of the nodes
+    def makeNodes(self, tag, adjTag, adjCost):
+        self.nodes[tag].adjacencyList.append([self.nodes[adjTag], adjCost])
+        self.nodes[adjTag].adjacencyList.append([self.nodes[tag], adjCost])
 
 class UnionFind:
     def __init__(self, nodes_G) -> None:
@@ -45,49 +90,48 @@ class UnionFind:
         return True
     
 class Solution:
-    def minCostConnectPoints(self, points) -> int:
-        #set n equal to number of edges, nodes = number of nodes
-        nodes = 10
-        n = len(points)
-        all_edges = []
+    def KruskalUF(self, points) -> int:
         
+        all_edges = []
+        n = len(points)
         # create list of all edges in complete graph.
         for curr_node in range(n): 
-            all_edges.append((points[curr_node][0], points[curr_node][1], points[curr_node][2]))
+            all_edges.append([points[curr_node][0], points[curr_node][1], points[curr_node][2]])
        
         # Sort all edges in increasing order of weight (column 2)
         all_edges.sort(key=lambda x: x[2])
-    
+        
         uf = UnionFind(n)
         mst_weight = 0
-        ##edges_used = 0
-        nodes_in_MST = 0
+        edges_used = 0
+        
 
-        while nodes_in_MST != nodes - 1:
-        ##while edges_used != n-1:
+        #while nodes_in_MST != nodes - 1:
+        while edges_used != n-1:
             for u, v, weight in all_edges:
                 if uf.union(u, v):
                     mst_weight += weight
-                    ##edges_used += 1
-                    nodes_in_MST += 1
+                    edges_used += 1
+                    #nodes_in_MST += 1
             return mst_weight
             
         
 
-List_G = [
-(1, 2, 4188),
-(2, 3, -4502),
-(3, 4, 6938),
-(3, 5, 6937),
-(4, 5, 3256),
-(5, 6, 7605),
-(6, 7, 8856),
-(7, 8, -7786),
-(8, 9, 9244),
-(8, 4, 5906),
-(9, 10, 7091),
-(9, 6, -5756)]
+#start = time.time()
 
+#startingNode = 1 # Root node tag
+new = Graph()
+points = new.buildGraph(open("mst_dataset/input_random_02_10.txt", "r"))
+#print(points)
+numEdges = new.numEdges(open("mst_dataset/input_random_02_10.txt", "r"))
+#print(numEdges)
 mst = Solution()
-print(mst.minCostConnectPoints(List_G)) 
-print("--- %s seconds ---" % (time.time() - start_time))
+mst.KruskalUF(points)
+'''
+end = time.time()
+print("Program execution time =", end - start)
+sum = 0
+for node in new.nodes.values():
+    sum += node.key
+print("Final cost =",sum, "\n")
+'''
