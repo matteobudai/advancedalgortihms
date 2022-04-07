@@ -1,5 +1,7 @@
 import time 
 import glob
+import matplotlib.pyplot as plt
+import numpy as np
 
 #Create a graph
 class Graph:
@@ -89,6 +91,10 @@ class Solution:
 
 
 results = []
+results_xplot = []
+results_yplot = []
+results_zplot = []
+count_files = 0
 
 for filepath in glob.iglob('mst_dataset//*.txt'):
     start = time.time()
@@ -98,6 +104,26 @@ for filepath in glob.iglob('mst_dataset//*.txt'):
     mst = Solution()
     end = time.time()
     results.append([numNodes,mst.KruskalUF(points,numNodes),round(end - start,5)])
+    count_files += 1
 
 results.sort(key=lambda x: x[0])
+
+for i in range(1,count_files): 
+    results_xplot.append(int(results[i][0]))
+    results_yplot.append(float(results[i][2]))
+
+
 print("\n","Nodes, Cost, Time","\n",results)
+print("\n","\n",results_yplot)
+
+z = np.polyfit(results_xplot, results_yplot, 1)
+p = np.poly1d(z)
+plt.plot(results_xplot, results_yplot)
+plt.plot(results_xplot,p(results_xplot),"r--")
+plt.title('Kruskal - Union Find')
+plt.ylabel('Execution time (s)')
+plt.xlabel('# of Vertices')
+plt.ylim(0,.15)
+plt.show()
+
+
