@@ -6,7 +6,6 @@ from collections import defaultdict
 import time 
 import glob
 
-
 #Create a node
 class Node:
     def __init__(self, tag: int):
@@ -29,7 +28,7 @@ class Graph:
         for iterate in range(numEdges):
             info.append(lines[iterate].split())
         for i in range(0,numEdges): 
-            info_int.append([int(info[i][0]), int(info[i][1]), int(info[i][2])])
+            info_int.append([int(info[i][2]), int(info[i][0]), int(info[i][1])]) #Changed from original code so that I can use .sort()
         return info_int
 
     #Create number of edges
@@ -44,13 +43,14 @@ class Graph:
         numNodes = int(lines[0].split()[0])
         return numNodes
 
-   
 # Python implementation for Kruskal's algorithm in a Naive mode
 
 # Find set of vertex a
 def find(a, parent):
-    while parent[a] != a:
-        a = parent[a]
+    print(a)
+    print(parent)
+    while parent[a-1] != a:
+        a = parent[a-1]
     return a
 
 # Does union of a and b. It returns
@@ -59,47 +59,21 @@ def find(a, parent):
 def union(a, b, parent):
     node1 = find(a, parent)
     node2 = find(b, parent)
-    parent[node1] = parent[node2]
+    parent[node1-1] = parent[node2-1]
 
-def kruskalMST(cost):
-    #Create the graph
-    numNodes = cost[0]
-    print(cost)
-    parent = [node for node in range(numNodes)]
-    costs = []
-    for iterate in range(numNodes):
-        costs.append([INF]*numNodes)
-    for iterate in range(1, len(cost)):
-        num1 = cost[iterate][0]-1
-        num2 = cost[iterate][1]-1
-        costs[num1][num2] = cost[iterate][2]
-        costs[num2][num1] = cost[iterate][2]
-        costTotal = 0 
+def Kruskal(costs):
+  totalCost = 0
+  numNodes = costs[0]
+  print(costs)
+  parent = [node for node in range(1, numNodes+1)]
+  costs = costs[1:]
+  costs.sort() # sort list of edges by weight
+  for edges in costs:
+    if find(edges[1], parent) != find(edges[2], parent):
+      union(edges[1], edges[2], parent)
+      totalCost += edges[0]
+  return totalCost
 
-    # Initialize sets of disjoint sets
-    for node in range(numNodes):
-        parent[node] = node
-
-    # Include minimum weight edges one by one
-    edge = 0
-    while edge < numNodes - 1:
-        min = INF
-        a = -1
-        b = -1
-        for i in range(numNodes):
-            for j in range(numNodes):
-                if find(i, parent) != find(j, parent) and costs[i][j] < min:
-                    min = costs[i][j]
-                    a = i
-                    b = j
-        union(a, b, parent)
-        edge += 1
-        costTotal += min
-    #print("Minimum cost= " + str(costTotal))
-    return costTotal
-
-
-INF = float('inf')
 results = []
 results_xplot = []
 results_yplot = []
@@ -107,12 +81,13 @@ results_zplot = []
 count_files = 0
 
 for filepath in glob.iglob('mst_dataset//*.txt'):
+    print(filepath)
     start = time.time()
     new = Graph()
     points = new.buildGraph(open(filepath, "r"))
     numNodes = new.numNodes(open(filepath, "r"))
     costs = [numNodes]+points
-    mst = kruskalMST(costs)
+    mst = Kruskal(costs)
     end = time.time()
     results.append([numNodes,mst,round(end - start,5)])
     count_files += 1
@@ -122,7 +97,6 @@ results.sort(key=lambda x: x[0])
 for i in range(1,count_files): 
     results_xplot.append(int(results[i][0]))
     results_yplot.append(float(results[i][2]))
-
 
 print("\n","Nodes, Cost, Time","\n",results)
 print("\n","\n",results_yplot)
