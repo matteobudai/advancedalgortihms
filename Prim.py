@@ -1,7 +1,9 @@
 import math
+from optparse import Values
 import time
 from collections import defaultdict
 import glob
+from typing import ValuesView
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -167,28 +169,20 @@ results.sort(key=lambda x: x[0])
 #print(results)
 
 for i in range(1,count_files): 
-    results_xplot.append(int(results[i][0]))
+    results_xplot.append(str(results[i][0]))
     results_yplot.append(float(results[i][3]))
 
+N = len(results_xplot)
+x2 = np.arange(N)
 
-plt.plot(results_xplot, results_yplot)
+#plt.set_xticks(results_xplot)
+plt.plot(x2, results_yplot)
 plt.title('Prim')
 plt.ylabel('Execution time (s)')
 plt.xlabel('# of Vertices')
-plt.ylim(0,5)
+plt.xticks(x2,results_xplot)
+plt.tick_params(axis='x', labelrotation=90) 
+plt.ylim(0,3)
 plt.show()
 
 
-
-
-
-
-
-
-
-
-   
-
-    
-
-    

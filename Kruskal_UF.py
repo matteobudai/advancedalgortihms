@@ -113,17 +113,16 @@ for i in range(1,count_files):
     results_yplot.append(float(results[i][2]))
 
 
-print("\n","Nodes, Cost, Time","\n",results)
-print("\n","\n",results_yplot)
+N = len(results_xplot)
+x2 = np.arange(N)
 
-z = np.polyfit(results_xplot, results_yplot, 1)
-p = np.poly1d(z)
-plt.plot(results_xplot, results_yplot)
-plt.plot(results_xplot,p(results_xplot),"r--")
+#plt.set_xticks(results_xplot)
+plt.plot(x2, results_yplot)
 plt.title('Kruskal - Union Find')
 plt.ylabel('Execution time (s)')
 plt.xlabel('# of Vertices')
-plt.ylim(0,.15)
+plt.xticks(x2,results_xplot)
+plt.tick_params(axis='x', labelrotation=90) 
+plt.ylim(0,0.18)
 plt.show()
-
 
