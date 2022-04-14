@@ -47,8 +47,8 @@ class Graph:
 
 # Find set of vertex a
 def find(a, parent):
-    print(a)
-    print(parent)
+    #print(a)
+    #print(parent)
     while parent[a-1] != a:
         a = parent[a-1]
     return a
@@ -64,7 +64,7 @@ def union(a, b, parent):
 def Kruskal(costs):
   totalCost = 0
   numNodes = costs[0]
-  print(costs)
+  #print(costs)
   parent = [node for node in range(1, numNodes+1)]
   costs = costs[1:]
   costs.sort() # sort list of edges by weight
@@ -77,11 +77,10 @@ def Kruskal(costs):
 results = []
 results_xplot = []
 results_yplot = []
-results_zplot = []
 count_files = 0
 
 for filepath in glob.iglob('mst_dataset//*.txt'):
-    print(filepath)
+    #print(filepath)
     start = time.time()
     new = Graph()
     points = new.buildGraph(open(filepath, "r"))
@@ -95,18 +94,17 @@ for filepath in glob.iglob('mst_dataset//*.txt'):
 results.sort(key=lambda x: x[0])
 
 for i in range(1,count_files): 
-    results_xplot.append(int(results[i][0]))
+    results_xplot.append(str(results[i][0]))
     results_yplot.append(float(results[i][2]))
 
-print("\n","Nodes, Cost, Time","\n",results)
-print("\n","\n",results_yplot)
+N = len(results_xplot)
+x2 = np.arange(N)
 
-z = np.polyfit(results_xplot, results_yplot, 1)
-p = np.poly1d(z)
-plt.plot(results_xplot, results_yplot)
-plt.plot(results_xplot,p(results_xplot),"r--")
-plt.title('Kruskal - Union Find')
+plt.plot(x2, results_yplot)
+plt.title('Kruskal - Naive')
 plt.ylabel('Execution time (s)')
 plt.xlabel('# of Vertices')
-plt.ylim(0,.15)
+plt.xticks(x2,results_xplot)
+plt.tick_params(axis='x', labelrotation=90) 
+plt.ylim(0,30)
 plt.show()
