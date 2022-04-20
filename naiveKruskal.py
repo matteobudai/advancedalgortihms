@@ -46,31 +46,28 @@ class Graph:
 # Python implementation for Kruskal's algorithm in a Naive mode
 
 # Find set of vertex a
-def find(a, parent):
-    #print(a)
-    #print(parent)
+def search(a, parent):
     while parent[a-1] != a:
         a = parent[a-1]
     return a
 
-# Does union of a and b. It returns
+# Combines a and b. It returns
 # false if a and b are already in same
 # set.
-def union(a, b, parent):
-    node1 = find(a, parent)
-    node2 = find(b, parent)
+def combine(a, b, parent):
+    node1 = search(a, parent)
+    node2 = search(b, parent)
     parent[node1-1] = parent[node2-1]
 
 def Kruskal(costs):
   totalCost = 0
   numNodes = costs[0]
-  #print(costs)
   parent = [node for node in range(1, numNodes+1)]
   costs = costs[1:]
   costs.sort() # sort list of edges by weight
   for edges in costs:
-    if find(edges[1], parent) != find(edges[2], parent):
-      union(edges[1], edges[2], parent)
+    if search(edges[1], parent) != search(edges[2], parent):
+      combine(edges[1], edges[2], parent)
       totalCost += edges[0]
   return totalCost
 
@@ -80,7 +77,6 @@ results_yplot = []
 count_files = 0
 
 for filepath in glob.iglob('mst_dataset//*.txt'):
-    #print(filepath)
     start = time.time()
     new = Graph()
     points = new.buildGraph(open(filepath, "r"))
