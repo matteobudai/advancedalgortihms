@@ -1,0 +1,27 @@
+\section{Kruskal's Algorithm with ''naive'' implementation}\label{kruskal_naive}
+
+\begin{lstlisting}[mathescape=true]
+KRUSKAL (G)
+A = $\emptyset$
+sort edges of G by cost
+for each edge e, in non decreasing order of cost do
+	if A $\cup$ {e} is acyclic then
+		A = A $\cup$ {e}
+return A	
+\end{lstlisting}
+
+Kruskal ''naive'' è un algoritmo \textit{greedy} che non utilizza particolari strutture dati e che costruisce un MST aggiungendo ad ogni iterazione un nuovo lato di costo minimo all'insieme $A$, se ciò non comporta il verificarsi di un ciclo.
+
+\subsection{Data Structure}
+	\subsubsection{Graph} 
+
+	\subsubsection{Edge}
+
+
+\subsection{Implementation}
+
+
+\subsection{Complexity}
+	
+
+\pagebreak

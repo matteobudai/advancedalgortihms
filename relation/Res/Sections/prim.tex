@@ -1,0 +1,39 @@
+\section{Prim's Algorithm}\label{prim}
+
+\begin{lstlisting}[mathescape=true]
+PRIM (G, s)
+	X = {s} //set of vertexes included in the MST
+	A = $\emptyset$ //set of edges included in the MST
+	while there is an edge (u, v) with u $\in$ X and v $\notin$ X do
+		(u$\ast$, v$\ast$) = a minimum cost such edge //light edge
+		add vertex v$\ast$ to X
+		add edge (u$\ast$, v$\ast$) to A
+	return A	
+
+\end{lstlisting}
+
+L'algoritmo di Prim costruisce un MST a partire da un vertice di iniziale $s$, aggiungendoci un lato alla volta:
+
+\begin{figure}[H]
+	\centering\includegraphics[width=15cm]{Img/prim.jpg}
+\end{figure}
+
+Ad ogni iterazione, si considerano i lati attraversati dal taglio (raffigurato in blu) che separa $X$ dal resto del grafo. 
+Successivamente, di questi viene scelto il lato $(u, v)$ di peso minimo. 
+Infine, il lato selezionato viene aggiunto all'insieme $A$ e il vertice $v$ viene aggiunto all'insieme $X$.
+
+\subsection{Data Structure}
+	
+	\subsubsection{MinHeap}
+				
+	\subsubsection{Node}
+		
+	\subsubsection{Graph}
+		
+
+\subsection{Implementation}
+
+\subsection{Complexity}
+
+	
+\pagebreak
