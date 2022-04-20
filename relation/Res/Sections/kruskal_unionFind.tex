@@ -1,0 +1,33 @@
+\section{Kruskal's Algorithm with Union-Find}\label{kruskal_uf}
+
+% For each edge (u, v) $\in$ G.E ordered by increasing order by weight(u, v):
+\begin{lstlisting}[mathescape=true]
+KRUSKAL(G):
+	A = $\emptyset$
+	For each vertex v $\in$ G.V:
+		MAKE-SET(v)
+	sort edges of G by cost
+	for each edge e, in non decreasing order of cost do	
+		if FIND-SET(u) $\neq$ FIND-SET(v):       
+			A = A $\cup$ {(u, v)}
+			UNION(u, v)
+	return A
+\end{lstlisting}
+
+Come per la sua versione naive, l'implementazione di Kruskal tramite l'uso della struttura dati Union Find è un algoritmo greedy che costruisce un MST aggiungendo ad ogni iterazione un nuovo lato di costo minimo all'insieme A se i vertici di questo non fanno già parte dello stesso set.
+
+\subsection{Data Structure}
+
+	\subsubsection{Graph and Edge}
+	
+	
+	\subsubsection{Union Find}
+		
+
+	\subsection{Implementation}
+		
+	
+	\subsection{Complexity}
+	
+
+\pagebreak
