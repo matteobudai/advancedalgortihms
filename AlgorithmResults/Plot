@@ -1,0 +1,43 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+xplot_file = open('AlgorithmResults//xplot.txt', 'r')
+xplot = xplot_file.read().split(' ')
+xplot_file.close()
+
+Kruskal_UF = open('AlgorithmResults//KruskalUF.txt', 'r')
+yplot_UF = Kruskal_UF.read().split(' ')
+Kruskal_UF.close()
+
+Kruskal_NV = open('AlgorithmResults//KruskalNaive.txt', 'r')
+yplot_NV = Kruskal_NV.read().split(' ')
+Kruskal_NV.close()
+
+Prim = open('AlgorithmResults//Prims.txt', 'r')
+yplot_PR = Prim.read().split(' ')
+Prim.close()
+
+xplot_final= []
+yplot_UF_final = []
+yplot_NV_final = []
+yplot_PR_final = []
+for i in range(len(xplot)): 
+    xplot_final.append(str(xplot[i]))
+    yplot_UF_final.append(float(yplot_UF[i]))
+    yplot_NV_final.append(float(yplot_NV[i]))
+    yplot_PR_final.append(float(yplot_PR[i]))
+
+N = len(xplot_final)
+x2 = np.arange(N)
+
+plt.plot(x2, yplot_UF_final, label = "Kruskal-UnionFind")
+plt.plot(x2, yplot_NV_final, label = "Kruskal-Naive")
+plt.plot(x2, yplot_PR_final, label = "Prims")
+plt.title('Algorithm Comparison')
+plt.ylabel('Execution time (s)')
+plt.xlabel('# of Vertices')
+plt.xticks(x2,xplot_final)
+plt.tick_params(axis='x', labelrotation=90) 
+plt.ylim(0,30)
+plt.legend()
+plt.show()
