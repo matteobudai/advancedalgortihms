@@ -96,33 +96,3 @@ results_yplot = []
 results_zplot = []
 count_files = 0
 
-for filepath in glob.iglob('mst_dataset//*.txt'):
-    start = time.time()
-    new = Graph()
-    points = new.buildGraph(open(filepath, "r"))
-    numNodes = new.numNodes(open(filepath, "r"))
-    mst = Solution()
-    end = time.time()
-    results.append([numNodes,mst.KruskalUF(points,numNodes),round(end - start,5)])
-    count_files += 1
-
-results.sort(key=lambda x: x[0])
-
-for i in range(1,count_files): 
-    results_xplot.append(int(results[i][0]))
-    results_yplot.append(float(results[i][2]))
-
-
-N = len(results_xplot)
-x2 = np.arange(N)
-
-#plt.set_xticks(results_xplot)
-plt.plot(x2, results_yplot)
-plt.title('Kruskal - Union Find')
-plt.ylabel('Execution time (s)')
-plt.xlabel('# of Vertices')
-plt.xticks(x2,results_xplot)
-plt.tick_params(axis='x', labelrotation=90) 
-plt.ylim(0,0.18)
-plt.show()
-
