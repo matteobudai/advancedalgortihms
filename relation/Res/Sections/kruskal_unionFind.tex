@@ -4,29 +4,60 @@
 \begin{lstlisting}[mathescape=true]
 KRUSKAL(G):
 	A = $\emptyset$
-	For each vertex v $\in$ G.V:
-		MAKE-SET(v)
+	U = initialize(V)
 	sort edges of G by cost
-	for each edge e, in non decreasing order of cost do	
-		if FIND-SET(u) $\neq$ FIND-SET(v):       
-			A = A $\cup$ {(u, v)}
-			UNION(u, v)
+	for each edge e = (u,v), in non decreasing order of cost do	
+		if FIND(U, u) $\neq$ FIND(U, v): 
+		    A = A $\cup$ {(u, v)}
+		    UNION(u, v)
 	return A
 \end{lstlisting}
 
 
 \subsection{Data Structure}
 
-	\subsubsection{Graph and Edge}
+	\subsubsection{Graph}
+	The Graph class contains three methods that take the graph .txt file as an input, and returns data in useable format for the algorithm. 
+	\begin{itemize}
+    \item \textbf{buildGraph} - This method returns a list of lists in format [u, v, weight], where u and v are connected vertices and weight is the cost of their connecting edge. Each value in the list is an integer.  
+    \item \textbf{numEdges} - This method returns the number of edges as an integer.
+    \item \textbf{numNodes} - This method returns the number of nodes as an integer.
+    \end{itemize}
 	
-	
-	\subsubsection{Union Find}
+	\subsubsection{UnionFind}
+	The UnionFind class contains three methods, which support the implementation of the Kruskal Union Find solution. 
+	\begin{itemize}
+    \item \textbf{Initialize} - Input the number of nodes to the Initialize method, and it creates a group and rank each node. Each node is initialized to be in a group of itself with a rank of zero. This function has a linear complexity of O(n), where n is the number of nodes.  
+    \item \textbf{Find} - Input a node to the Find method, and it returns the group that the node belongs to. If the nodes does not belong to it's own group, then traverse it's parent nodes until finding the node which is it's own parent. This function has a complexity that is proportional to the depth of nodes traversed to find the root parent node, and therefore a complexity of O(n) where n is the total number of nodes in the graph. 
+    \item \textbf{Union} - Input two nodes u and v to the Union method, and call the Find function to determine the group for each node. If the nodes already exist within the same group then do nothing and return false. Else, return true and merge the nodes into the group of the node with the highest rank, and update the rank of the group. On the first call of the Union function, each node is in a distinct group of equal rank, so we default to merging the group of node u into the group of node v. This function has a complexity of O(log n)
+    \end{itemize}
 		
 
 	\subsection{Implementation}
+	The solution to the cost of the minimum spanning tree is performed in the following steps:
+	\begin{enumerate}
+    \item Create the Graph object through the Graph() class and call the buildGraph method to define a variable "points", and call the numNodes() method to define a variable "numNodes". 
+    \item Pass the "points" and "numNodes" variables as inputs to the KruskalUF method, which performs the following steps in order to return the cost of the minimum spanning tree of the graph:
+    	\begin{itemize}
+    	\item Calculate the length of the list "points" to determine the number of the edges in the graph. 
+    	\item Sort the list "points" in non-decreasing order of weight 
+    	\item Create an object to initialize the Union Find data structure through the UnionFind() class, and pass the "numNodes" as the input
+    	\item Initialize the cost of the minimum spanning tree as zero, and the number of edges within the minimum spanning tree as zero (i.e., initialize an empty minimum spanning tree). 
+    	\item While the number of edges in the minimum spanning tree is less than the number of edges in the graph, traverse each edge (u,v), and call the Union method with the nodes u and v as input. If the Union method returns true, then add their edge weight to the cost of the minimum weight spanning tree, and increase the number of edges in the minimum spanning tree. Else, if it returns false, move to the next edge.  
+    	\end{itemize}
+    \end{enumerate}	
 		
 	
 	\subsection{Complexity}
+    To calculate the total complexity, we must consider:
+    \begin{itemize}
+    \item Initializing the nodes in Union Find data structure, where n is number of nodes: O(n)
+    \item Sorting the edges, where m is the number of edges: O(m log n)
+    \item Find called twice, a total of 2m times: O(m log n) 
+    \item Updating the minimum spanning tree: O(m)
+    \item Union performed n-1 times: O(n log n)
+    \end{itemize}
+    Considering all componets, the complexity is O (m log n)
 	
 
 \pagebreak
