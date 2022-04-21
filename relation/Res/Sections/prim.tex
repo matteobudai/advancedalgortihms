@@ -1,30 +1,94 @@
 \section{Prim's Algorithm}\label{prim}
 
+\underline{Naive version}:
 \begin{lstlisting}[mathescape=true]
 PRIM (G, s)
-	X = {s} //set of vertexes included in the MST
+    X = {s} //set of vertexes included in the MST
 	A = $\emptyset$ //set of edges included in the MST
 	while there is an edge (u, v) with u $\in$ X and v $\notin$ X do
 		(u$\ast$, v$\ast$) = a minimum cost such edge //light edge
 		add vertex v$\ast$ to X
 		add edge (u$\ast$, v$\ast$) to A
 	return A	
+\end{lstlisting}	
+\underline{Min heap implementation}:
+\begin{lstlisting}[mathescape=true]
+PRIM (G, s):
+    for each node u $\in$ V do
+        key[u] $\leftarrow$ $\infty$
+        $\pi$[u] $\leftarrow$ null  //parent of u in the minimum spanning tree
+    key[s] $\leftarrow$ 0
+    Q $\leftarrow$ V    //Q contains all nodes not in the minimum spanning tree
+    while Q $\neq$ $\emptyset$ 
+        u $\leftarrow$ extractMin(Q)
+        for each v adjacent to u do
+            if v $\in$ Q and weight(u,v) < key[v] then
+                key[v] $\leftarrow$ weight(u,v)
+                $\pi$[v] $\leftarrow$ u
 
 \end{lstlisting}
 
-
 \subsection{Data Structure}
-	
-	\subsubsection{MinHeap}
-				
 	\subsubsection{Node}
-		
+	The Node class initializes six instance variables for each node of the graph
+	\begin{itemize}
+	\item tag: integer identifier of a node 
+	\item key: default key value of null
+	\item parent: default parent value of null
+	\item isParent: boolean value to determine if a node is in a heap, default of true
+	\item index: index of node of the min heap array
+	\item adjacencyList: adjacency list of the node, default is an empty list
+	\end{itemize}
 	\subsubsection{Graph}
-		
+	The Graph class takes the graph .txt file as an input, and initializes variables that construct the graph and support the min heap data structure.  
+	\begin{itemize}
+	\item \textbf{Initialize}: calls Python's defaultdict dictionary type
+	\item \textbf{createNodes}: takes number of nodes as an input, and initializes each node in the node dictionary
+	\item \textbf{buildGraph}: takes the graph .txt file as an input, and passes the number of nodes to the createNodes method. Futhermore, it passes each connecting node and their edge weight to the makeNodes method, which appends to the nodes adjacencyList. 
+	\item \textbf{numNodes}: takes the graph .txt file as an input and returns the number of nodes
+	\end{itemize}	
+	\subsubsection{MinHeap} The MinHeap class creates the min heap data structure with an array heap, and is initialized by passing the node dictionary values and the starting node integer tag. In addition to methods that return the standard array heap rules parent, leftchild, and rightchild, the following methods are defined:
+	\begin{itemize}
+	\item \textbf{minHeapify}: this method is passed an index and checks if any node swaps are required to maintain the min heap data structure
+	\item \textbf{shiftUp}: this method is passed an index and properly positions the index element in the array in order to maintain the min heap data structure
+	\item \textbf{extractMin}: the method extracts the min, or root value, of the array heap. After extracting, it calls the minHeapify method in order to maintain the min heap data structure
+	\end{itemize}
+	
 
 \subsection{Implementation}
-
+The solution to the cost of the minimum spanning tree is performed in the following steps:
+\begin{enumerate}
+    \item Create the Graph object through the Graph() class and call the buildGraph method
+    \item Define a starting node tag
+    \item Pass the Graph object and the starting node to the Prim function, which performs the following steps in order to return the cost of the minimum spanning tree of the graph:
+    \begin{itemize}
+    	\item Define the key for each node as infinity ($\infty$)
+    	\item Define the key for the starting node as zero (0) 
+    	\item Initialize the min heap data structure by calling the MinHeap class, passing the nodes from the graph and the starting node. If the starting node is not already the root node, the call to initialize the min heap data structure will re-set the root node as the passed starting node, and will update the index for all other nodes.
+    	\item Now that the MinHeap object has been created, and initially contains all nodes that are not in the minimum spanning tree, we will perform the following iterative process until the heap size is zero (i.e., all nodes have been visited by the minimum spanning tree):
+    	\begin{itemize}
+    	    \item Extract the minimum from the min heap data structure by calling extractMin(), which in turn returns the minimum and calls minHeapify() to make any updates required in order to preserve the min heap data structure. 
+    	    \item For each node, v, in the adjacency list of the node extracted by the extractMin call, check if it is both present in the array heap and the weight of connecting edge is less than the key value of node extracted by the extractMin call.
+    	    \item If the check above is true, check if node v had previously been assigned a key other than infinity, and if so remove the original key value from the cost minimum spanning tree. Then, 
+    	    \begin{enumerate}
+    	    \item update the parent of v be the node extracted by the extractMin call
+    	    \item update it's key to their connecting edge weight
+    	    \item add the edge weight to the cost of minimum spanning tree
+    	    \item call the shiftUp method in order to update the position of node v based on it's updated key value
+    	    \item add the key value to the cost of the minimum spanning tree. 
+    	    \end{enumerate}
+    	\end{itemize}
+    \end{itemize}
+\end{enumerate}
 \subsection{Complexity}
-
+To calculate the total complexity, we must consider the following components where n in the number of nodes and m is the number of edges:
+\begin{itemize}
+    \item Initialization of each node: O(n)
+    \item The ExtractMin has complexity of O(log n) and is performed n times in the while loop, so total complexity of O(n log n)
+    \item The for loop is called O(n) times, the check within the for loop is of complexity O(1), and the shiftUp method is of complexity O(log n). Therefore, the total cost of the for loop is O(m log n). 
+\end{itemize}
+    Adding these components simplifies to a total complexity of O(m log n).
+    
+ 
 	
 \pagebreak
