@@ -12,16 +12,25 @@ return A
 
 Kruskal ''naive'' è un algoritmo \textit{greedy} che non utilizza particolari strutture dati e che costruisce un MST aggiungendo ad ogni iterazione un nuovo lato di costo minimo all'insieme $A$, se ciò non comporta il verificarsi di un ciclo.
 
-\subsection{Data Structure}
-	\subsubsection{Graph} 
+\subsection{Input and Data Structures}
 
-	\subsubsection{Edge}
+The input for this algorithm will be a graph represented as a list of lists. The first element in this list is the number of nodes in the graph and the rest of the elements are nodes with the following format: [Cost, Node 1, Node 2]. This format was chosen because we can then use .sort() to sort the list of costs in non-decreasing order because the cost is the first item in the list. 
+
+Furthermore, we use one important data structure in our algorithm, which is the list "parent" that we use to find the parent node of a specific node. At the beginning, every node's parent is itself because none of the nodes are connected, but once two nodes become connected, the node will be assigned the value of the index of its parent node. 
 
 
 \subsection{Implementation}
+To implement this algorithm, we used three different functions: search, combine, and Kruskal.
 
+1. The $\textbf{search}$ function is used to find the subtree that a certain node belongs to. The function takes in as parameters the node "a" and the list called "parent." The function will look at the parent of node "a", and then the parent of that node, and onward until the parent of the node is itself. In doing so, we can find out which set a node belongs to by seeing who the parent node of the whole set is.
+
+2. The $\textbf{combine}$ function is used to combine two subtrees into one. The function works by getting the parent of both subtrees, and then assigning one of them to be the parent of the other subtree. Thus, all elements in this subtree will ultimately have this node be the parent of their subtree. 
+
+3. The $\textbf{Kruskal}$ function is the main function in our algorithm. The algorithm starts by initiating the total cost to be 0 and uses the number of nodes to create the list of parents that is numNodes long. We then remove the number of nodes element from the list, and sort all of the costs in non-decreasing order using sort(). We then traverse the list of edges and check to see if the two nodes in the edge are part of the same subtree by using our search function. If they are not, then we will combine these two subtrees to create one subtree using our combine function and increase our total cost by the weight of the edge. Once we have gone through all of the edges, we will return the total cost.  
 
 \subsection{Complexity}
-	
+The algorithm uses O(m * (log n)) time complexity to sort all of the edges in the list since it uses the sort() function in Python. The $\textbf{for}$ loop will take O(m) time because it will iterate through every edge. Within this loop, we call $\textbf{search}$ and this function grows linearly because the more elements that are in the subtree, the more parents the function will have to look through. 
+
+The algorithm therefore has a time complexity of O(m * (log n)) + O(m * n) since the sorting is not embedded into the $\textbf{for}$ loop. This simplifies to just O(m * n) time complexity because this time complexity is the slower of the two, and therefore will affect the time complexity the most.
 
 \pagebreak
