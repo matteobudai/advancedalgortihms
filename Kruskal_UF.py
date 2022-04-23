@@ -1,8 +1,3 @@
-import time 
-import glob
-import matplotlib.pyplot as plt
-import numpy as np
-
 #Create a graph
 class Graph:
     #Create list of lists containing all vertices and weights in format [u,v,weight]
@@ -89,10 +84,4 @@ class Solution:
                     edges_used += 1
             return mst_weight
 
-
-results = []
-results_xplot = []
-results_yplot = []
-results_zplot = []
-count_files = 0
 
