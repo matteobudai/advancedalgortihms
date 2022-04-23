@@ -1,12 +1,6 @@
 import math
-from optparse import Values
 import time
 from collections import defaultdict
-import glob
-from typing import ValuesView
-import matplotlib.pyplot as plt
-import numpy as np
-
 
 #Create a node
 class Node:
@@ -144,5 +138,4 @@ def Prim (G: Graph, s: Node):
                 Q.shiftUp(v[0].index)   
                 MST += v[0].key
     end=time.time()
-    #print("Start = node", s.tag,"\nPrim execution time =", end - start)
     return MST          
